@@ -1,11 +1,10 @@
 package com.dailycodework.sbdemoapp.controller;
 
 import com.dailycodework.sbdemoapp.model.Product;
+import com.dailycodework.sbdemoapp.view.IProductService;
 import com.dailycodework.sbdemoapp.view.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,10 +12,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
+    private final IProductService productService;
 
     @GetMapping("/all")
     public List<Product> getAllProducts(){
         return productService.getProducts();
+    }
+
+    @GetMapping("/{id}/product")
+    public Product getProductById(@PathVariable Long id){
+        return productService.getProductById(id);
+    }
+
+    @PostMapping("/add")
+    public Product addProduct(Product product){
+        return productService.addProduct(product);
+    }
+
+    @PutMapping("/update")
+    public Product updateProduct(Product product, Long id){
+        return productService.updateProduct(product, id);
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public void deleteProduct(@PathVariable Long id){
+         productService.deleteProduct(id);
     }
 }

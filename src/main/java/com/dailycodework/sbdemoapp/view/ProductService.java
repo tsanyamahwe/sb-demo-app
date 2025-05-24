@@ -12,34 +12,36 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements CommandLineRunner {
+public class ProductService implements IProductService{
     private final ProductRepository productRepository;
 
     @Override
-    public void run(String... args) throws Exception {
-        // Check if products already exist to avoid duplicates
-        if (productRepository.count() == 0) {
-            final List<Product> products = Arrays.asList(
-                    new Product(null, "Samsung", 100, "Some smart phones"), // null ID for auto-generation
-                    new Product(null, "iPhone", 500, "Some smart phones"),
-                    new Product(null, "Sneakers", 70, "Some smart shoes"),
-                    new Product(null, "Dell", 200, "Some smart laptops"),
-                    new Product(null, "HP", 100, "Some smart computer"));
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
+    }
 
-            productRepository.saveAll(products);
-            System.out.println("Sample products loaded successfully!");
-        } else {
-            System.out.println("Products already exist, skipping data loading.");
+    @Override
+    public Product updateProduct(Product product, Long id) {
+        if(productRepository.findById(id).isPresent()){
+            return productRepository.save(product);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteProduct(Long productId) {
+        if(productRepository.findById(productId).isPresent()){
+            productRepository.deleteById(productId);
         }
     }
 
-    // Alternative method if you need to clear and reload data
-    public void clearAndReloadProducts() throws Exception {
-        productRepository.deleteAll();
-        run(); // reload fresh data
-    }
-
+    @Override
     public List<Product> getProducts(){
         return productRepository.findAll();
+    }
+
+    @Override
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElse(null);
     }
 }
