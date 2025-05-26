@@ -25,12 +25,12 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public Product addProduct(Product product){
+    public Product addProduct(@RequestBody Product product){
         return productService.addProduct(product);
     }
 
     @PutMapping("/update")
-    public Product updateProduct(Product product, Long id){
+    public Product updateProduct(@RequestBody Product product, @RequestParam Long id){
         return productService.updateProduct(product, id);
     }
 
